@@ -122,8 +122,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
+  /* App chrome is not selectable text (as in native apps); editable fields opt back in below. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
   overflow-x: hidden;
 }
+input, textarea { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
 
 button, input, textarea, select { font: inherit; color: inherit; }
 button {
@@ -255,7 +260,6 @@ h1, h2, h3, p { margin: 0; }
   margin-bottom: 9px;
 }
 .progress-text strong { color: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
-.progress-pct { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .progress-track {
   height: 6px;
   border-radius: 999px;
@@ -273,25 +277,28 @@ h1, h2, h3, p { margin: 0; }
   transition: transform var(--dur-slow) var(--ease), background-color var(--dur) var(--ease);
 }
 .progress.is-complete .progress-fill { background: var(--success); }
-.progress.is-complete .progress-pct { color: var(--success); }
 
 /* ==========================================================================
    Sections
    ========================================================================== */
-.section { margin-bottom: 22px; }
-.section-head { margin: 0 0 8px; }
+.section { margin-bottom: 24px; }
+.section-head { margin: 0 0 6px; }
+/* Header content aligns with the rows below: icon over the checkbox column, label over the title column. */
 .section-toggle {
   width: 100%;
   min-height: 44px;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 4px 4px 4px 2px;
+  padding: 4px 12px 4px 16px;
   border: 0;
   background: none;
   text-align: left;
   border-radius: var(--radius-sm);
+  transition: opacity var(--dur-fast) var(--ease);
 }
+.section-toggle:active { opacity: .55; }
+.section-toggle .prio-icon { margin-right: 6px; }
 .section-name { font-size: 17px; font-weight: 650; letter-spacing: -.015em; }
 .section-count {
   font-size: 15px;
@@ -316,7 +323,7 @@ h1, h2, h3, p { margin: 0; }
   align-items: baseline;
   justify-content: space-between;
   gap: 10px;
-  margin: 0 2px 10px;
+  margin: 0 16px 8px;
   font-size: 17px;
   font-weight: 650;
   letter-spacing: -.015em;
@@ -330,38 +337,50 @@ h1, h2, h3, p { margin: 0; }
 [data-p="later"], [data-priority="later"] { --p: var(--p-later); }
 
 /* ==========================================================================
-   Task row
+   Task row — iOS inset-grouped list: one surface per list, hairline separators
+   inset to the title column, rows clipped by the group's corners while swiping.
    ========================================================================== */
-.task-list { display: grid; gap: 8px; }
+.task-list {
+  display: block;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  outline: .5px solid var(--border);
+  outline-offset: -.5px;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translateZ(0); /* Safari: make overflow + radius clip transformed rows */
+}
 
 .task {
   position: relative;
-  border-radius: var(--radius-md);
   isolation: isolate;
   touch-action: pan-y;
-  transition: height var(--dur) var(--ease), opacity var(--dur) var(--ease), margin var(--dur) var(--ease);
+  transition: height var(--dur) var(--ease), opacity var(--dur) var(--ease);
 }
 .task.is-removing { overflow: hidden; opacity: 0; }
 
 .task-card {
   position: relative;
   z-index: 1;
-  min-height: 56px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 6px 4px 6px 4px;
+  padding: 4px;
   background: var(--surface);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  outline: .5px solid var(--border);
-  outline-offset: -.5px;
   touch-action: pan-y;
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
   transition: transform var(--dur) var(--ease), background-color var(--dur-fast) var(--ease);
   will-change: transform;
+}
+.task + .task .task-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 52px; right: 0;
+  border-top: .5px solid var(--hairline);
 }
 .task.is-dragging .task-card { transition: none; }
 .task.is-pressing .task-card { background: var(--surface-pressed); }
@@ -458,6 +477,18 @@ h1, h2, h3, p { margin: 0; }
   color: var(--text-tertiary);
 }
 .icon-btn.task-more::after { content: none; }
+/* On touch screens the row already offers tap (details), long-press (actions) and swipe, so the
+   repeated ⋯ is visual noise. It stays in the accessibility tree for VoiceOver users. */
+@media (pointer: coarse) {
+  .icon-btn.task-more {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .task-card { padding-right: 14px; }
+}
 
 .task.is-done .task-name {
   color: var(--text-secondary);
@@ -465,7 +496,6 @@ h1, h2, h3, p { margin: 0; }
   text-decoration-color: var(--text-tertiary);
 }
 .task.is-done .task-meta { opacity: .7; }
-.task.is-done .task-card { box-shadow: none; background: var(--surface); background: color-mix(in srgb, var(--surface) 70%, var(--bg)); }
 
 /* Swipe action backgrounds */
 .swipe-bg {
@@ -531,6 +561,7 @@ h1, h2, h3, p { margin: 0; }
   outline-offset: -.5px;
 }
 .empty-inline > .i { color: var(--text-tertiary); }
+.task-list > .empty-inline { background: none; outline: none; border-radius: 0; }
 
 /* ==========================================================================
    Buttons
@@ -671,7 +702,6 @@ h1, h2, h3, p { margin: 0; }
 .tab .i { transition: stroke-width var(--icon-dur) var(--ease); }
 .tab { transition: color var(--icon-dur) var(--ease); }
 .tab[aria-current="page"] { color: var(--accent); font-weight: 600; }
-.tab[aria-current="page"] .tab-icon { background: var(--accent-soft); }
 .tab[aria-current="page"] .i { stroke-width: 2.1; }
 .tab:active .tab-icon { transform: scale(.94); }
 
@@ -1110,7 +1140,7 @@ button.chip::after { content: ""; position: absolute; inset: -4px 0; }
    ========================================================================== */
 .cal-card {
   background: var(--surface);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   outline: .5px solid var(--border);
   outline-offset: -.5px;
@@ -1139,7 +1169,7 @@ button.chip::after { content: ""; position: absolute; inset: -4px 0; }
 }
 .cal-day {
   position: relative;
-  height: 44px;
+  height: 46px;
   display: grid;
   place-items: center;
   border: 0;
@@ -1150,18 +1180,20 @@ button.chip::after { content: ""; position: absolute; inset: -4px 0; }
   border-radius: 50%;
 }
 .cal-day-num {
-  width: 36px; height: 36px;
+  width: 34px; height: 34px;
   display: grid; place-items: center;
   border-radius: 50%;
   transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
+.cal-day:active .cal-day-num { background: var(--surface-secondary); }
 .cal-day.is-today .cal-day-num { color: var(--accent); font-weight: 700; }
 .cal-day.is-past:not(.is-today) .cal-day-num { color: var(--text-secondary); }
 .cal-day[aria-pressed="true"] .cal-day-num { background: var(--accent); color: var(--accent-contrast); font-weight: 650; }
+/* Task dot sits below the day circle, never touching the selection disc. */
 .cal-day.has-open::after, .cal-day.has-done::after {
   content: "";
   position: absolute;
-  bottom: 1px;
+  bottom: 0;
   width: 4px; height: 4px;
   border-radius: 50%;
   background: var(--accent);
@@ -1169,24 +1201,34 @@ button.chip::after { content: ""; position: absolute; inset: -4px 0; }
 .cal-day.has-done:not(.has-open)::after { background: var(--text-tertiary); }
 
 /* ==========================================================================
-   Notes
+   Notes — same inset-grouped list as tasks
    ========================================================================== */
-.note-list { display: grid; gap: 8px; }
-.note-card {
-  width: 100%;
-  display: grid;
-  gap: 3px;
-  padding: 14px 16px;
-  border: 0;
-  border-radius: var(--radius-md);
+.note-list {
   background: var(--surface);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   outline: .5px solid var(--border);
   outline-offset: -.5px;
-  text-align: left;
-  transition: transform var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
+  overflow: hidden;
 }
-.note-card:active { transform: scale(.985); background: var(--surface-pressed); }
+.note-card {
+  position: relative;
+  width: 100%;
+  display: grid;
+  gap: 3px;
+  padding: 12px 16px;
+  border: 0;
+  background: none;
+  text-align: left;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+.note-card + .note-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 16px; right: 0;
+  border-top: .5px solid var(--hairline);
+}
+.note-card:active { background: var(--surface-pressed); }
 .note-title {
   font-size: 16px;
   font-weight: 600;
@@ -1211,7 +1253,7 @@ button.chip::after { content: ""; position: absolute; inset: -4px 0; }
    ========================================================================== */
 .card {
   background: var(--surface);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   outline: .5px solid var(--border);
   outline-offset: -.5px;
@@ -1243,8 +1285,7 @@ button.chip::after { content: ""; position: absolute; inset: -4px 0; }
 
 .week-card { margin-bottom: 24px; }
 .week-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
-.week-head h2 { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 650; }
-.week-head h2 .i { color: var(--accent); }
+.week-head h2 { font-size: 15px; font-weight: 650; }
 .week-head span { font-size: 13px; color: var(--text-secondary); }
 .week-bars {
   display: grid;
@@ -1274,7 +1315,7 @@ button.chip::after { content: ""; position: absolute; inset: -4px 0; }
 .settings-group .group-row + .group-row::before { left: 46px; }
 .settings-group .row-label { min-width: 0; }
 .row-value { color: var(--text-secondary); font-size: 15px; text-align: right; }
-.app-footnote { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 12px; color: var(--text-tertiary); margin-top: 22px; }
+.app-footnote { text-align: center; font-size: 12px; color: var(--text-tertiary); margin-top: 22px; }
 
 /* ==========================================================================
    Toast
@@ -1329,7 +1370,7 @@ html.has-sheet .toast { bottom: calc(var(--kb) + var(--safe-bottom) + 90px); }
    Motion
    ========================================================================== */
 @keyframes fade-in { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
-@keyframes task-in { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes task-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .task.is-new { animation: task-in var(--dur-slow) var(--ease); }
 .screen.is-entering { animation: screen-in var(--dur) var(--ease); }
 @keyframes screen-in { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }

@@ -441,7 +441,7 @@ function progressText(done, total) {
 function progressHTML(done, total) {
   const ratio = total ? done / total : 0;
   return `<div class="progress${total && done === total ? ' is-complete' : ''}" id="todayProgress">
-    <div class="progress-text">${progressText(done, total)}<span class="progress-pct">${Math.round(ratio * 100)}%</span></div>
+    <div class="progress-text">${progressText(done, total)}</div>
     <div class="progress-track" role="progressbar" aria-label="Tiến độ hôm nay" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${done}">
       <span class="progress-fill" style="--v:${ratio}"></span>
     </div>
@@ -454,7 +454,7 @@ function updateProgressInPlace() {
   const done = tasks.filter(t => t.done).length;
   const ratio = tasks.length ? done / tasks.length : 0;
   el.classList.toggle('is-complete', !!tasks.length && done === tasks.length);
-  $('.progress-text', el).innerHTML = `${progressText(done, tasks.length)}<span class="progress-pct">${Math.round(ratio * 100)}%</span>`;
+  $('.progress-text', el).innerHTML = progressText(done, tasks.length);
   $('.progress-fill', el).style.setProperty('--v', ratio);
   $('.progress-track', el).setAttribute('aria-valuenow', done);
 }
@@ -650,7 +650,7 @@ function renderMe() {
     html += `<p class="streak-line">${icon('flame', 'sm')}<span><strong>${streak} ngày</strong> liên tiếp hoàn thành ít nhất một việc</span></p>`;
   }
   html += `<div class="card week-card">
-    <div class="week-head"><h2>${icon('activity', 'sm')}7 ngày qua</h2><span>${weekTotal} việc đã xong</span></div>
+    <div class="week-head"><h2>7 ngày qua</h2><span>${weekTotal} việc đã xong</span></div>
     <div class="week-bars" role="img" aria-label="${esc(week.map((d, i) => `${WEEKDAYS[fromISO(d).getDay()]}: ${weekCounts[i]}`).join(', '))}">
       ${week.map((d, i) => {
         const c = weekCounts[i];
@@ -668,7 +668,7 @@ function renderMe() {
     ${settingRow('database', 'Lưu dữ liệu', 'Trên thiết bị')}
     ${settingRow('smartphone', 'Dùng ngoại tuyến', swReady ? 'Sẵn sàng' : 'Sau lần mở kế tiếp')}
   </div>
-  <p class="app-footnote">${icon('info', 'xs')}Done Today · Dữ liệu chỉ lưu trên trình duyệt này</p>`;
+  <p class="app-footnote">Done Today · Dữ liệu chỉ lưu trên trình duyệt này</p>`;
   return html;
 }
 
@@ -816,7 +816,6 @@ function commitSwipe(g, dir) {
   setTimeout(() => {
     row.classList.add('is-removing');
     row.style.height = '0px';
-    row.style.marginBottom = '-8px';
   }, motion(170));
   setTimeout(() => (dir === 'right' ? shiftTask(id) : deleteTask(id)), motion(380));
 }
