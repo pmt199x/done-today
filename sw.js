@@ -1,5 +1,5 @@
 // Bump CACHE whenever app assets change so installed PWAs pick up the new version.
-const CACHE = 'done-today-v2';
+const CACHE = 'done-today-v3';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.json', './icon-192.png', './icon-512.png', './icon-180.png'];
 
 self.addEventListener('install', e => {

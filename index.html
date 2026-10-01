@@ -18,29 +18,78 @@
   <title>Done Today</title>
 </head>
 <body>
+  <!--
+    Icon system — one outline family on a 24×24 grid.
+    Rules: 3px live-area padding, round caps/joins, stroke from CSS (.i-xs … .i-xl), no fills
+    except tiny state dots. Large circles use r=9, frames use rx≈3. Colour always via currentColor.
+    Usage: <svg class="i i-md" aria-hidden="true"><use href="#i-NAME"/></svg>  ·  JS: icon('NAME', 'md')
+  -->
   <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.3 2.6 2.6 5-5.4"/></symbol>
-      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
-      <symbol id="i-note" viewBox="0 0 24 24"><path d="M6.5 3.5h7.8l4.2 4.2v10.8a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M14 3.7V8h4.3M8.5 12.5h7M8.5 16h4.5"/></symbol>
+      <!-- Navigation -->
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 10.2 12 3.5l8.5 6.7v8.3a2 2 0 0 1-2 2H15v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5H5.5a2 2 0 0 1-2-2Z"/></symbol>
+      <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.3 2.6 2.6 5-5.4"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+      <symbol id="i-sticky-note" viewBox="0 0 24 24"><path d="M14.5 20.5H6.5a3 3 0 0 1-3-3v-11a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v8Z"/><path d="M14.5 20.5v-4a2 2 0 0 1 2-2h4"/></symbol>
+      <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M6.5 3.5h7.8l4.2 4.2v10.8a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M14 3.7V8h4.3M8.5 12.5h7M8.5 16h4.5"/></symbol>
       <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.8 20c.9-3.6 3.7-5.6 7.2-5.6s6.3 2 7.2 5.6"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></symbol>
+
+      <!-- Actions -->
       <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18" cy="12" r="1.3"/></symbol>
-      <symbol id="i-close" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
       <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4.2 4.2 8.8-9.4"/></symbol>
-      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
-      <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 21V4.5M5.5 4.5h10.2l-1.9 4 1.9 4H5.5"/></symbol>
-      <symbol id="i-forward" viewBox="0 0 24 24"><path d="M4.5 12h14M13 6.5l5.5 5.5-5.5 5.5"/></symbol>
+      <symbol id="i-ellipsis" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r=".6"/><circle cx="12" cy="12" r=".6"/><circle cx="18.5" cy="12" r=".6"/></symbol>
+      <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4.5 19.5h4l10.3-10.3a2.1 2.1 0 0 0-3-3L5.5 16.5l-1 3Z"/><path d="m14.5 7.5 2.9 2.9"/></symbol>
       <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15M10 3.8h4M6.5 7l.8 11.3a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9L17.5 7M10 11v5.5M14 11v5.5"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 8.5V6A2.5 2.5 0 0 0 13 3.5H6A2.5 2.5 0 0 0 3.5 6v7A2.5 2.5 0 0 0 6 15.5h2.5"/></symbol>
+      <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="4.5" rx="1.5"/><path d="M5 8.5V18a2.5 2.5 0 0 0 2.5 2.5h9A2.5 2.5 0 0 0 19 18V8.5M10 12.5h4"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9 3.5h6M10 3.5v5.8l-3.2 3.6v1.6h10.4v-1.6L14 9.3V3.5M12 14.5v6"/></symbol>
+      <symbol id="i-pin-off" viewBox="0 0 24 24"><path d="M9 3.5h6M14 3.5v5.8l3.2 3.6v1.6M12 14.5v6M10 3.5v5.8l-3.2 3.6v1.6h7.7M3.5 3.5l17 17"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19.5 12h-15M10.5 6l-6 6 6 6"/></symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 7.5 4.5 12 9 16.5"/><path d="M4.5 12h10a5 5 0 0 1 0 10H12"/></symbol>
+      <symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3.5 12A8.5 8.5 0 1 0 6 6L3.5 8.5"/><path d="M3.5 3.5v5h5"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.75" cy="10.75" r="6.75"/><path d="m20 20-4.5-4.5"/></symbol>
+      <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16l-6.2 7.4v5.8l-3.6 1.8v-7.6Z"/></symbol>
+      <symbol id="i-sort" viewBox="0 0 24 24"><path d="M7.5 4v16M4 16.5 7.5 20l3.5-3.5M16.5 20V4M13 7.5 16.5 4 20 7.5"/></symbol>
       <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/></symbol>
-      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></symbol>
       <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
       <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
-      <symbol id="i-list" viewBox="0 0 24 24"><path d="M9.5 6.5h10M9.5 12h10M9.5 17.5h10"/><path d="m4 6.5 1.2 1.2L7 5.6M4 12l1.2 1.2L7 11.1"/><circle cx="5.3" cy="17.5" r=".9"/></symbol>
-      <symbol id="i-text" viewBox="0 0 24 24"><path d="M5 6.5h14M5 11h14M5 15.5h9"/></symbol>
-      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4.5 19.5h4l10.3-10.3a2.1 2.1 0 0 0-3-3L5.5 16.5l-1 3Z"/><path d="m14.5 7.5 2.9 2.9"/></symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></symbol>
+      <symbol id="i-chevron-up" viewBox="0 0 24 24"><path d="m6.5 14.5 5.5-5.5 5.5 5.5"/></symbol>
+
+      <!-- Date & time -->
+      <symbol id="i-calendar-check" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M9 15.2l2 2 4-4.2"/></symbol>
+      <symbol id="i-calendar-days" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h.01M12 14h.01M16 14h.01M8 17.2h.01M12 17.2h.01"/></symbol>
+      <symbol id="i-calendar-forward" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M8.5 15.25h7M12.75 12.5l2.75 2.75-2.75 2.75"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.5 10a5.5 5.5 0 0 1 11 0c0 5 2 6.5 2 6.5h-15s2-1.5 2-6.5Z"/><path d="M10.2 20a2 2 0 0 0 3.6 0"/></symbol>
+      <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m16.5 3.5 3 3-3 3"/><path d="M19.5 6.5H8A4.5 4.5 0 0 0 3.5 11v.5"/><path d="m7.5 20.5-3-3 3-3"/><path d="M4.5 17.5H16a4.5 4.5 0 0 0 4.5-4.5v-.5"/></symbol>
       <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.8v1.8M12 19.4v1.8M2.8 12h1.8M19.4 12h1.8M5.5 5.5l1.3 1.3M17.2 17.2l1.3 1.3M5.5 18.5l1.3-1.3M17.2 6.8l1.3-1.3"/></symbol>
-      <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 7.5 4.5 12 9 16.5"/><path d="M4.5 12h10a5 5 0 0 1 0 10H12"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></symbol>
+
+      <!-- Priority & states -->
+      <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 21V4.5M5.5 4.5h10.2l-1.9 4 1.9 4H5.5"/></symbol>
+      <symbol id="i-circle-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2" fill="currentColor"/></symbol>
+      <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5.8 18.2C4.6 9.8 9.8 4.5 20 4.5c0 10.2-5.4 15.3-14.2 13.7Z"/><path d="M3.5 20.5c3.6-4.6 7-7.8 11-10.3"/></symbol>
+      <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 3c1.5 3.5 6.5 6.5 6.5 11.5a6.5 6.5 0 0 1-13 0c0-2.6 1.3-4.5 2.8-5.8.2 1.8 1 3 2.2 3.6C10 8.8 10.6 5.8 12 3Z"/></symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M10.5 4.5 12 9l4.5 1.5L12 12l-1.5 4.5L9 12l-4.5-1.5L9 9Z"/><path d="M18 14.5v5M15.5 17h5"/></symbol>
+      <symbol id="i-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11.2v5M12 7.8h.01"/></symbol>
+
+      <!-- Content, stats & settings -->
+      <symbol id="i-list-checks" viewBox="0 0 24 24"><path d="m3.5 6.5 1.75 1.75 3.25-3.5M3.5 16.5l1.75 1.75 3.25-3.5M11.5 6.5h9M11.5 12h9M11.5 17.5h9"/></symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24"><path d="M6 19.5V14M12 19.5V5M18 19.5v-9"/></symbol>
+      <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4.4 17.5a8.5 8.5 0 1 1 15.2 0"/><path d="m12 13.7 3.8-4.3"/></symbol>
+      <symbol id="i-activity" viewBox="0 0 24 24"><path d="M3.5 12H7l2.5-7 5 14 2.5-7h3.5"/></symbol>
+      <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7.5" ry="2.75"/><path d="M4.5 6v12c0 1.5 3.4 2.75 7.5 2.75s7.5-1.25 7.5-2.75V6M4.5 12c0 1.5 3.4 2.75 7.5 2.75s7.5-1.25 7.5-2.75"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M4.5 15v3a2.5 2.5 0 0 0 2.5 2.5h10a2.5 2.5 0 0 0 2.5-2.5v-3"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M4.5 15v3a2.5 2.5 0 0 0 2.5 2.5h10a2.5 2.5 0 0 0 2.5-2.5v-3"/></symbol>
+      <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 19a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 17.9 9.5 4.75 4.75 0 0 1 17.5 19Z"/></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h8M16 7h4M4 17h4M12 17h8"/><circle cx="14" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></symbol>
+      <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="3"/><path d="M11 17.5h2"/></symbol>
     </defs>
   </svg>
 
@@ -52,25 +101,25 @@
     <main class="screen" id="screen" tabindex="-1"></main>
 
     <button class="fab" id="fab" type="button" aria-label="Thêm công việc">
-      <svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>
+      <svg class="i i-lg" aria-hidden="true"><use href="#i-plus"/></svg>
     </button>
 
     <nav class="tabbar" aria-label="Điều hướng chính">
       <div class="tabbar-inner">
         <button class="tab" type="button" data-tab="today">
-          <span class="tab-icon"><svg class="i" aria-hidden="true"><use href="#i-today"/></svg></span>
+          <span class="tab-icon"><svg class="i i-lg" aria-hidden="true"><use href="#i-check-circle"/></svg></span>
           <span class="tab-label">Hôm nay</span>
         </button>
         <button class="tab" type="button" data-tab="calendar">
-          <span class="tab-icon"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+          <span class="tab-icon"><svg class="i i-lg" aria-hidden="true"><use href="#i-calendar"/></svg></span>
           <span class="tab-label">Lịch</span>
         </button>
         <button class="tab" type="button" data-tab="notes">
-          <span class="tab-icon"><svg class="i" aria-hidden="true"><use href="#i-note"/></svg></span>
+          <span class="tab-icon"><svg class="i i-lg" aria-hidden="true"><use href="#i-sticky-note"/></svg></span>
           <span class="tab-label">Ghi chú</span>
         </button>
         <button class="tab" type="button" data-tab="me">
-          <span class="tab-icon"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span>
+          <span class="tab-icon"><svg class="i i-lg" aria-hidden="true"><use href="#i-user"/></svg></span>
           <span class="tab-label">Tôi</span>
         </button>
       </div>
@@ -89,7 +138,7 @@
         <button type="button" class="seg-btn" role="radio" aria-checked="false" data-capture-mode="note">Ghi chú</button>
       </div>
       <button type="button" class="icon-btn" data-close-sheet aria-label="Đóng">
-        <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+        <svg class="i i-md" aria-hidden="true"><use href="#i-x"/></svg>
       </button>
     </div>
 
@@ -97,6 +146,7 @@
       <textarea id="quickInput" class="capture-input" rows="1" enterkeyhint="done" autocomplete="off" placeholder="Cần làm gì?" aria-label="Nội dung"></textarea>
 
       <div class="parse-preview" id="parsePreview" hidden>
+        <svg class="i i-sm" aria-hidden="true"><use href="#i-sparkles"/></svg>
         <span class="parse-preview-text" id="parsePreviewText"></span>
         <button type="button" class="link-btn" id="parseDismiss">Bỏ qua</button>
       </div>
@@ -104,40 +154,47 @@
       <div class="task-options" id="taskOptions">
         <div class="chip-row" role="group" aria-label="Tùy chọn công việc">
           <button type="button" class="chip" id="dateChip" data-panel="date" aria-expanded="false" aria-controls="panelDate">
-            <svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg><span class="chip-label">Hôm nay</span>
+            <svg class="i i-sm" aria-hidden="true"><use href="#i-calendar"/></svg><span class="chip-label">Hôm nay</span>
           </button>
           <span class="chip chip-field" id="timeChip">
-            <svg class="i" aria-hidden="true"><use href="#i-clock"/></svg><span class="chip-label" id="timeChipLabel">Giờ</span>
+            <svg class="i i-sm" aria-hidden="true"><use href="#i-clock"/></svg><span class="chip-label" id="timeChipLabel">Giờ</span>
             <input type="time" id="quickTime" class="chip-native" aria-label="Chọn giờ" />
             <button type="button" class="chip-clear" id="quickTimeClear" aria-label="Bỏ giờ" hidden>
-              <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+              <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
             </button>
           </span>
           <button type="button" class="chip" id="priorityChip" data-panel="priority" aria-expanded="false" aria-controls="panelPriority">
-            <span class="prio-dot" aria-hidden="true"></span><span class="chip-label">Nên làm</span>
+            <svg class="i i-sm prio-icon" aria-hidden="true"><use href="#i-circle-dot"/></svg><span class="chip-label">Nên làm</span>
           </button>
-          <button type="button" class="chip" id="moreChip" data-panel="more" aria-expanded="false" aria-controls="panelMore">
-            <svg class="i" aria-hidden="true"><use href="#i-more"/></svg><span class="chip-label">Thêm</span>
+          <button type="button" class="chip" id="noteChip" data-panel="note" aria-expanded="false" aria-controls="panelNote">
+            <svg class="i i-sm" aria-hidden="true"><use href="#i-file-text"/></svg><span class="chip-label">Ghi chú</span>
+          </button>
+          <button type="button" class="chip" id="stepsChip" data-panel="steps" aria-expanded="false" aria-controls="panelSteps">
+            <svg class="i i-sm" aria-hidden="true"><use href="#i-list-checks"/></svg><span class="chip-label">Các bước</span>
           </button>
         </div>
 
         <div class="option-panel" id="panelDate" data-panel-body="date" hidden>
-          <button type="button" class="option" data-date-preset="0">Hôm nay</button>
-          <button type="button" class="option" data-date-preset="1">Ngày mai</button>
+          <button type="button" class="option" data-date-preset="0"><svg class="i i-sm" aria-hidden="true"><use href="#i-sun"/></svg>Hôm nay</button>
+          <button type="button" class="option" data-date-preset="1"><svg class="i i-sm" aria-hidden="true"><use href="#i-calendar-forward"/></svg>Ngày mai</button>
           <span class="option option-field">
+            <svg class="i i-sm" aria-hidden="true"><use href="#i-calendar-days"/></svg>
             <span id="quickDateLabel">Chọn ngày…</span>
             <input type="date" id="quickDate" class="chip-native" aria-label="Chọn ngày" />
           </span>
         </div>
 
         <div class="option-panel" id="panelPriority" data-panel-body="priority" role="radiogroup" aria-label="Mức ưu tiên" hidden>
-          <button type="button" class="option" role="radio" data-priority-option="must"><span class="prio-dot" data-p="must" aria-hidden="true"></span>Phải làm</button>
-          <button type="button" class="option" role="radio" data-priority-option="should"><span class="prio-dot" data-p="should" aria-hidden="true"></span>Nên làm</button>
-          <button type="button" class="option" role="radio" data-priority-option="later"><span class="prio-dot" data-p="later" aria-hidden="true"></span>Có thời gian</button>
+          <button type="button" class="option" role="radio" data-priority-option="must"><svg class="i i-sm prio-icon" data-p="must" aria-hidden="true"><use href="#i-flag"/></svg>Phải làm</button>
+          <button type="button" class="option" role="radio" data-priority-option="should"><svg class="i i-sm prio-icon" data-p="should" aria-hidden="true"><use href="#i-circle-dot"/></svg>Nên làm</button>
+          <button type="button" class="option" role="radio" data-priority-option="later"><svg class="i i-sm prio-icon" data-p="later" aria-hidden="true"><use href="#i-leaf"/></svg>Có thời gian</button>
         </div>
 
-        <div class="option-panel option-panel-stack" id="panelMore" data-panel-body="more" hidden>
+        <div class="option-panel option-panel-stack" id="panelNote" data-panel-body="note" hidden>
           <textarea id="quickNote" class="soft-input" rows="2" placeholder="Ghi chú ngắn" aria-label="Ghi chú cho công việc"></textarea>
+        </div>
+
+        <div class="option-panel option-panel-stack" id="panelSteps" data-panel-body="steps" hidden>
           <div class="subtask-editor" id="quickSubtasks"></div>
         </div>
       </div>
@@ -147,7 +204,7 @@
 
     <div class="sheet-footer">
       <button type="button" class="icon-btn icon-btn-lg" id="voiceBtn" aria-label="Nhập bằng giọng nói">
-        <svg class="i" aria-hidden="true"><use href="#i-mic"/></svg>
+        <svg class="i i-lg" aria-hidden="true"><use href="#i-mic"/></svg>
       </button>
       <button type="button" class="primary-btn" id="addQuickBtn" disabled>Thêm</button>
     </div>
@@ -159,7 +216,7 @@
     <div class="sheet-header">
       <h2 class="sheet-title" id="detailHeading">Chi tiết</h2>
       <button type="button" class="icon-btn" data-close-sheet aria-label="Đóng và lưu">
-        <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+        <svg class="i i-md" aria-hidden="true"><use href="#i-x"/></svg>
       </button>
     </div>
 
@@ -175,23 +232,23 @@
       <div class="field-block">
         <p class="field-caption" id="detailPriorityLabel">Ưu tiên</p>
         <div class="segmented segmented-prio" id="detailPriority" role="radiogroup" aria-labelledby="detailPriorityLabel">
-          <button type="button" class="seg-btn" role="radio" data-value="must"><span class="prio-dot" data-p="must" aria-hidden="true"></span>Phải làm</button>
-          <button type="button" class="seg-btn" role="radio" data-value="should"><span class="prio-dot" data-p="should" aria-hidden="true"></span>Nên làm</button>
-          <button type="button" class="seg-btn" role="radio" data-value="later"><span class="prio-dot" data-p="later" aria-hidden="true"></span>Có thời gian</button>
+          <button type="button" class="seg-btn" role="radio" data-value="must"><svg class="i i-sm prio-icon" data-p="must" aria-hidden="true"><use href="#i-flag"/></svg>Phải làm</button>
+          <button type="button" class="seg-btn" role="radio" data-value="should"><svg class="i i-sm prio-icon" data-p="should" aria-hidden="true"><use href="#i-circle-dot"/></svg>Nên làm</button>
+          <button type="button" class="seg-btn" role="radio" data-value="later"><svg class="i i-sm prio-icon" data-p="later" aria-hidden="true"><use href="#i-leaf"/></svg>Có thời gian</button>
         </div>
       </div>
 
       <div class="group">
         <label class="group-row">
-          <span class="row-label"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg>Ngày</span>
+          <span class="row-label"><svg class="i i-md" aria-hidden="true"><use href="#i-calendar"/></svg>Ngày</span>
           <input type="date" id="detailDate" class="row-input" />
         </label>
         <div class="group-row">
-          <label class="row-label" for="detailTime"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg>Giờ</label>
+          <label class="row-label" for="detailTime"><svg class="i i-md" aria-hidden="true"><use href="#i-clock"/></svg>Giờ</label>
           <span class="row-end">
             <input type="time" id="detailTime" class="row-input" />
             <button type="button" class="icon-btn icon-btn-sm" id="detailTimeClear" aria-label="Bỏ giờ" hidden>
-              <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+              <svg class="i i-xs" aria-hidden="true"><use href="#i-x"/></svg>
             </button>
           </span>
         </div>
@@ -208,7 +265,7 @@
 
     <div class="sheet-footer">
       <button type="button" class="secondary-btn danger-text" id="deleteTaskBtn">
-        <svg class="i" aria-hidden="true"><use href="#i-trash"/></svg>Xóa
+        <svg class="i i-md" aria-hidden="true"><use href="#i-trash"/></svg>Xóa
       </button>
       <button type="button" class="primary-btn" id="saveTaskBtn">Xong</button>
     </div>
@@ -220,16 +277,16 @@
     <h2 class="action-heading" id="actionHeading"></h2>
     <div class="action-list">
       <button type="button" class="action-item" data-task-action="toggle">
-        <svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span id="actionToggleLabel">Đánh dấu hoàn thành</span>
+        <svg class="i i-md" id="actionToggleIcon" aria-hidden="true"><use href="#i-check-circle"/></svg><span id="actionToggleLabel">Đánh dấu hoàn thành</span>
       </button>
       <button type="button" class="action-item" data-task-action="edit">
-        <svg class="i" aria-hidden="true"><use href="#i-edit"/></svg><span>Chỉnh sửa chi tiết</span>
+        <svg class="i i-md" aria-hidden="true"><use href="#i-pencil"/></svg><span>Chỉnh sửa chi tiết</span>
       </button>
       <button type="button" class="action-item" data-task-action="shift">
-        <svg class="i" aria-hidden="true"><use href="#i-forward"/></svg><span id="actionShiftLabel">Dời sang ngày mai</span>
+        <svg class="i i-md" aria-hidden="true"><use href="#i-calendar-forward"/></svg><span id="actionShiftLabel">Dời sang ngày mai</span>
       </button>
       <button type="button" class="action-item danger-text" data-task-action="delete">
-        <svg class="i" aria-hidden="true"><use href="#i-trash"/></svg><span>Xóa công việc</span>
+        <svg class="i i-md" aria-hidden="true"><use href="#i-trash"/></svg><span>Xóa công việc</span>
       </button>
     </div>
     <div class="sheet-footer">
@@ -246,7 +303,7 @@
         <p class="sheet-subtitle" id="noteMeta"></p>
       </div>
       <button type="button" class="icon-btn" data-close-sheet aria-label="Đóng và lưu">
-        <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+        <svg class="i i-md" aria-hidden="true"><use href="#i-x"/></svg>
       </button>
     </div>
     <div class="sheet-body">
@@ -254,7 +311,7 @@
     </div>
     <div class="sheet-footer">
       <button type="button" class="secondary-btn danger-text" id="deleteNoteBtn">
-        <svg class="i" aria-hidden="true"><use href="#i-trash"/></svg>Xóa
+        <svg class="i i-md" aria-hidden="true"><use href="#i-trash"/></svg>Xóa
       </button>
       <button type="button" class="primary-btn" id="saveNoteBtn">Xong</button>
     </div>
@@ -263,7 +320,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite">
     <span class="toast-msg" id="toastMsg"></span>
     <button type="button" class="toast-action" id="toastAction" hidden>
-      <svg class="i" aria-hidden="true"><use href="#i-undo"/></svg>Hoàn tác
+      <svg class="i i-sm" aria-hidden="true"><use href="#i-undo"/></svg>Hoàn tác
     </button>
   </div>
 

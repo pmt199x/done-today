@@ -7,7 +7,9 @@ const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
 const ESC_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' };
 const esc = (s = '') => String(s).replace(/[&<>'"]/g, c => ESC_MAP[c]);
-const icon = (name, cls = '') => `<svg class="i${cls ? ' ' + cls : ''}" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+/* Inline SVG icon from the sprite in index.html. size: xs 14 · sm 16 · md 20 · lg 24 · xl 32 (see styles.css). */
+const icon = (name, size = 'md', cls = '') => `<svg class="i i-${size}${cls ? ' ' + cls : ''}" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const setIcon = (svg, name) => { const use = svg && svg.querySelector('use'); if (use) use.setAttribute('href', `#i-${name}`); };
 const uid = () => Math.random().toString(36).slice(2, 10);
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const motion = ms => (reducedMotion() ? 0 : ms);
@@ -53,12 +55,14 @@ const lowerFirst = s => s.charAt(0).toLowerCase() + s.slice(1);
 const STORAGE_KEY = 'done-today-v1';
 const UI_KEY = 'done-today-ui';
 const PRIORITIES = [
-  { key: 'must', label: 'Phải làm' },
-  { key: 'should', label: 'Nên làm' },
-  { key: 'later', label: 'Có thời gian' }
+  { key: 'must', label: 'Phải làm', icon: 'flag' },
+  { key: 'should', label: 'Nên làm', icon: 'circle-dot' },
+  { key: 'later', label: 'Có thời gian', icon: 'leaf' }
 ];
 const PRIORITY_KEYS = PRIORITIES.map(p => p.key);
-const priorityLabel = key => (PRIORITIES.find(p => p.key === key) || PRIORITIES[1]).label;
+const priorityOf = key => PRIORITIES.find(p => p.key === key) || PRIORITIES[1];
+const priorityLabel = key => priorityOf(key).label;
+const priorityIcon = key => priorityOf(key).icon;
 
 function createSeed() {
   const today = todayISO();
@@ -396,7 +400,7 @@ function pageHeader(title, eyebrow, actions = '') {
 }
 
 function metaItem(name, text, { cls = '', sr = '' } = {}) {
-  return `<span class="meta-item${cls ? ' ' + cls : ''}">${icon(name)}${text ? `<span>${esc(text)}</span>` : ''}${sr ? `<span class="sr-only">${esc(sr)}</span>` : ''}</span>`;
+  return `<span class="meta-item${cls ? ' ' + cls : ''}">${icon(name, 'xs')}${text ? `<span>${esc(text)}</span>` : ''}${sr ? `<span class="sr-only">${esc(sr)}</span>` : ''}</span>`;
 }
 
 function taskRow(t, { showDate = false, showPriority = false } = {}) {
@@ -404,28 +408,28 @@ function taskRow(t, { showDate = false, showPriority = false } = {}) {
   const subDone = subs.filter(s => s.done).length;
   const meta = [];
   if (showDate) meta.push(metaItem('calendar', relativeDay(t.date)));
-  if (showPriority && t.priority === 'must') meta.push(metaItem('flag', priorityLabel(t.priority)));
+  if (showPriority && t.priority === 'must') meta.push(metaItem(priorityIcon(t.priority), priorityLabel(t.priority), { cls: 'is-priority' }));
   if (t.time) meta.push(metaItem('clock', t.time));
   if (subs.length) {
-    meta.push(metaItem('list', `${subDone}/${subs.length}`, {
+    meta.push(metaItem('list-checks', `${subDone}/${subs.length}`, {
       cls: subDone === subs.length ? 'is-complete' : '',
       sr: ` bước đã xong`
     }));
   }
-  if (t.note) meta.push(metaItem('text', '', { sr: 'Có ghi chú' }));
+  if (t.note) meta.push(metaItem('file-text', '', { sr: 'Có ghi chú' }));
   const name = esc(t.name);
   const classes = ['task', t.done && 'is-done', t.id === newTaskId && 'is-new'].filter(Boolean).join(' ');
 
   return `<div class="${classes}" role="listitem" data-id="${esc(t.id)}" data-priority="${t.priority}">
-    <div class="swipe-bg swipe-bg-shift" aria-hidden="true">${icon('forward')}<span>${esc(relativeDay(shiftTarget(t)))}</span></div>
+    <div class="swipe-bg swipe-bg-shift" aria-hidden="true">${icon('calendar-forward')}<span>${esc(relativeDay(shiftTarget(t)))}</span></div>
     <div class="swipe-bg swipe-bg-delete" aria-hidden="true"><span>Xóa</span>${icon('trash')}</div>
     <div class="task-card">
-      <button type="button" class="check" role="checkbox" aria-checked="${t.done}" aria-label="Hoàn thành: ${name}" data-action="toggle">${icon('check')}</button>
+      <button type="button" class="check" role="checkbox" aria-checked="${t.done}" aria-label="Hoàn thành: ${name}" data-action="toggle">${icon('check', 'sm')}</button>
       <button type="button" class="task-body" data-action="open">
         <span class="task-name">${name}</span>
         ${meta.length ? `<span class="task-meta">${meta.join('')}</span>` : ''}
       </button>
-      <button type="button" class="task-more" data-action="menu" aria-label="Tùy chọn: ${name}">${icon('more')}</button>
+      <button type="button" class="icon-btn icon-btn-subtle task-more" data-action="menu" aria-label="Tùy chọn: ${name}">${icon('ellipsis')}</button>
     </div>
   </div>`;
 }
@@ -458,15 +462,15 @@ function updateProgressInPlace() {
 function sectionHTML(p, list) {
   const open = list.filter(t => !t.done).length;
   const collapsed = !!ui.collapsed[p.key];
-  const count = open ? String(open) : icon('check');
+  const count = open ? String(open) : icon('check', 'sm');
   const countSr = open ? ` — ${open} việc chưa xong` : ' — đã xong hết';
   return `<section class="section${collapsed ? ' is-collapsed' : ''}" data-priority="${p.key}">
     <h2 class="section-head">
       <button type="button" class="section-toggle" data-action="toggle-section" data-key="${p.key}" aria-expanded="${!collapsed}" aria-controls="list-${p.key}">
-        <span class="prio-dot" aria-hidden="true"></span>
+        ${icon(p.icon, 'md', 'prio-icon')}
         <span class="section-name">${p.label}</span>
         <span class="section-count"><span aria-hidden="true">${count}</span><span class="sr-only">${countSr}</span></span>
-        ${icon('chevron-down', 'section-chevron')}
+        ${icon('chevron-down', 'md', 'section-chevron')}
       </button>
     </h2>
     <div class="task-list" id="list-${p.key}" role="list">${list.map(t => taskRow(t)).join('')}</div>
@@ -481,7 +485,7 @@ function renderToday() {
 
   if (!tasks.length) {
     return html + `<div class="empty">
-      <div class="empty-icon">${icon('sun')}</div>
+      <div class="empty-icon">${icon('sun', 'xl')}</div>
       <h2>Hôm nay bạn đang rảnh.</h2>
       <p>Thêm việc mới bất cứ khi nào bạn nghĩ ra.</p>
       <button type="button" class="pill-btn" data-action="add">${icon('plus')}Thêm việc</button>
@@ -536,8 +540,8 @@ function renderCalendar() {
       <h2 class="cal-month">Tháng ${m}, ${y}</h2>
       <div class="cal-nav">
         ${todayBtn}
-        <button type="button" class="icon-btn" data-action="cal-prev" aria-label="Tháng trước">${icon('chevron-left')}</button>
-        <button type="button" class="icon-btn" data-action="cal-next" aria-label="Tháng sau">${icon('chevron-right')}</button>
+        <button type="button" class="icon-btn icon-btn-subtle" data-action="cal-prev" aria-label="Tháng trước">${icon('chevron-left', 'lg')}</button>
+        <button type="button" class="icon-btn icon-btn-subtle" data-action="cal-next" aria-label="Tháng sau">${icon('chevron-right', 'lg')}</button>
       </div>
     </div>
     <div class="cal-grid">${cells}</div>
@@ -546,7 +550,7 @@ function renderCalendar() {
   html += `<section class="section">
     <h2 class="list-title">${esc(dayTitle)}<small>${dayTasks.length ? `${open} chưa xong` : ''}</small></h2>
     <div class="task-list" role="list">${sortedDone.map(t => taskRow(t, { showPriority: true })).join('')
-      || `<div class="empty-inline">Chưa có việc nào. <button type="button" class="link-btn" data-action="add">Thêm việc</button></div>`}</div>
+      || `<div class="empty-inline">${icon('calendar-check', 'xl')}<span>Chưa có việc nào. <button type="button" class="link-btn" data-action="add">Thêm việc</button></span></div>`}</div>
   </section>`;
 
   if (sel === today) {
@@ -580,7 +584,7 @@ function renderNotes() {
   let html = pageHeader('Ghi chú', notes.length ? `${notes.length} ghi chú` : 'Ghi lại mọi ý nghĩ');
   if (!notes.length) {
     return html + `<div class="empty">
-      <div class="empty-icon">${icon('note')}</div>
+      <div class="empty-icon">${icon('sticky-note', 'xl')}</div>
       <h2>Chưa có ghi chú</h2>
       <p>Lưu nhanh ý tưởng, thông tin hay điều cần nhớ.</p>
       <button type="button" class="pill-btn" data-action="add">${icon('plus')}Ghi chú mới</button>
@@ -627,18 +631,26 @@ function renderMe() {
 
   const swReady = 'serviceWorker' in navigator && !!navigator.serviceWorker.controller;
 
+  const stat = (iconName, value, label) => `<div class="card stat-card">
+    <span class="stat-value">${value}</span>
+    <span class="stat-caption">${icon(iconName, 'xs')}${label}</span>
+  </div>`;
+  const settingRow = (iconName, label, value) => `<div class="group-row">
+    <span class="row-label">${icon(iconName)}${label}</span><span class="row-value">${value}</span>
+  </div>`;
+
   let html = pageHeader('Tôi', 'Tiến độ của bạn');
   html += `<div class="stat-grid">
-    <div class="card stat-card"><span class="stat-value">${todayDone}<small class="stat-label">/${todayTasks.length}</small></span><span class="stat-label">Xong hôm nay</span></div>
-    <div class="card stat-card"><span class="stat-value">${all ? Math.round(done / all * 100) : 0}%</span><span class="stat-label">Tỷ lệ hoàn thành</span></div>
-    <div class="card stat-card"><span class="stat-value">${weekTotal}</span><span class="stat-label">Xong trong 7 ngày</span></div>
-    <div class="card stat-card"><span class="stat-value">${all - done}</span><span class="stat-label">Đang mở</span></div>
+    ${stat('check-circle', `${todayDone}<small class="stat-of">/${todayTasks.length}</small>`, 'Xong hôm nay')}
+    ${stat('gauge', `${all ? Math.round(done / all * 100) : 0}%`, 'Tỷ lệ hoàn thành')}
+    ${stat('chart', weekTotal, 'Xong trong 7 ngày')}
+    ${stat('circle', all - done, 'Đang mở')}
   </div>`;
   if (streak >= 2) {
-    html += `<p class="streak-line">${icon('sun')}<span><strong>${streak} ngày</strong> liên tiếp hoàn thành ít nhất một việc</span></p>`;
+    html += `<p class="streak-line">${icon('flame', 'sm')}<span><strong>${streak} ngày</strong> liên tiếp hoàn thành ít nhất một việc</span></p>`;
   }
   html += `<div class="card week-card">
-    <div class="week-head"><h2>7 ngày qua</h2><span>${weekTotal} việc đã xong</span></div>
+    <div class="week-head"><h2>${icon('activity', 'sm')}7 ngày qua</h2><span>${weekTotal} việc đã xong</span></div>
     <div class="week-bars" role="img" aria-label="${esc(week.map((d, i) => `${WEEKDAYS[fromISO(d).getDay()]}: ${weekCounts[i]}`).join(', '))}">
       ${week.map((d, i) => {
         const c = weekCounts[i];
@@ -651,12 +663,12 @@ function renderMe() {
     </div>
   </div>`;
   html += `<div class="group settings-group">
-    <div class="group-row"><span>Tự chuyển việc chưa xong</span><span>Bật</span></div>
-    <div class="group-row"><span>Ghi chú</span><span>${state.notes.length}</span></div>
-    <div class="group-row"><span>Lưu dữ liệu</span><span>Trên thiết bị</span></div>
-    <div class="group-row"><span>Dùng ngoại tuyến</span><span>${swReady ? 'Sẵn sàng' : 'Sau lần mở kế tiếp'}</span></div>
+    ${settingRow('calendar-forward', 'Tự chuyển việc chưa xong', 'Bật')}
+    ${settingRow('sticky-note', 'Ghi chú', state.notes.length)}
+    ${settingRow('database', 'Lưu dữ liệu', 'Trên thiết bị')}
+    ${settingRow('smartphone', 'Dùng ngoại tuyến', swReady ? 'Sẵn sàng' : 'Sau lần mở kế tiếp')}
   </div>
-  <p class="app-footnote">Done Today · Dữ liệu chỉ lưu trên trình duyệt này</p>`;
+  <p class="app-footnote">${icon('info', 'xs')}Done Today · Dữ liệu chỉ lưu trên trình duyệt này</p>`;
   return html;
 }
 
@@ -928,9 +940,9 @@ $$('.chip-native').forEach(input => input.addEventListener('click', () => {
 function createSubtaskEditor(root, onChange = () => {}) {
   let items = [];
   const rowHTML = s => `<div class="subtask${s.done ? ' is-done' : ''}" data-sub-id="${esc(s.id)}">
-    <button type="button" class="check" role="checkbox" aria-checked="${s.done}" aria-label="Hoàn thành bước">${icon('check')}</button>
+    <button type="button" class="check" role="checkbox" aria-checked="${s.done}" aria-label="Hoàn thành bước">${icon('check', 'sm')}</button>
     <input class="subtask-input" type="text" value="${esc(s.name)}" aria-label="Tên bước" enterkeyhint="next" autocomplete="off" />
-    <button type="button" class="subtask-remove" aria-label="Xóa bước">${icon('close')}</button>
+    <button type="button" class="icon-btn icon-btn-subtle subtask-remove" aria-label="Xóa bước">${icon('x', 'sm')}</button>
   </div>`;
   const newRowHTML = `<div class="subtask subtask-new">
     <span class="subtask-add-icon" aria-hidden="true">${icon('plus')}</span>
@@ -1030,9 +1042,14 @@ function setCaptureMode(mode) {
 }
 
 function setPanel(name) {
+  const focusWasInPanel = $$('[data-panel-body]', quickSheet).some(p => !p.hidden && p.contains(document.activeElement));
   draft.panel = draft.panel === name ? null : name;
   $$('[data-panel-body]', quickSheet).forEach(p => { p.hidden = p.dataset.panelBody !== draft.panel; });
   $$('[data-panel]', quickSheet).forEach(c => c.setAttribute('aria-expanded', String(c.dataset.panel === draft.panel)));
+  // Typing panels take focus straight away (inside the tap handler, so iOS keeps the keyboard up).
+  if (draft.panel === 'note') quickNote.focus({ preventScroll: true });
+  else if (draft.panel === 'steps') { const input = $('[data-new]', $('#quickSubtasks')); if (input) input.focus({ preventScroll: true }); }
+  else if (focusWasInPanel && openSheetEl === quickSheet) quickInput.focus({ preventScroll: true });
 }
 
 function updateQuickUI() {
@@ -1063,13 +1080,15 @@ function updateQuickUI() {
 
   const prioChip = $('#priorityChip');
   prioChip.dataset.p = d.priority;
+  setIcon($('.prio-icon', prioChip), priorityIcon(d.priority));
   $('.chip-label', prioChip).textContent = priorityLabel(d.priority);
   prioChip.classList.toggle('is-set', d.priority !== 'should');
   $$('[data-priority-option]').forEach(b => b.setAttribute('aria-checked', String(b.dataset.priorityOption === d.priority)));
 
   const st = quickSubs.stats();
-  $('#moreChip').classList.toggle('is-set', !!quickNote.value.trim() || st.total > 0);
-  $('.chip-label', $('#moreChip')).textContent = st.total ? `${st.total} bước` : quickNote.value.trim() ? 'Có ghi chú' : 'Thêm';
+  $('#noteChip').classList.toggle('is-set', !!quickNote.value.trim());
+  $('#stepsChip').classList.toggle('is-set', st.total > 0);
+  $('.chip-label', $('#stepsChip')).textContent = st.total ? `${st.total} bước` : 'Các bước';
 
   const det = d.detected || {};
   const parts = [];
@@ -1287,6 +1306,7 @@ function openActions(id) {
   actionTaskId = id;
   $('#actionHeading').textContent = t.name;
   $('#actionToggleLabel').textContent = t.done ? 'Đánh dấu chưa xong' : 'Đánh dấu hoàn thành';
+  setIcon($('#actionToggleIcon'), t.done ? 'circle' : 'check-circle');
   $('#actionShiftLabel').textContent = `Dời sang ${lowerFirst(relativeDay(shiftTarget(t)))}`;
   openSheet(actionSheet);
   actionSheet.focus({ preventScroll: true });

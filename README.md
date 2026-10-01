@@ -18,6 +18,19 @@ Mobile-first daily checklist + quick notes PWA, optimized first for **iPhone 14 
 - PWA manifest + service worker for install/offline use after HTTPS deployment.
 - Safe-area support for Dynamic Island and Home Indicator.
 
+## Icon system
+
+All UI icons are inline SVG symbols in a single sprite at the top of `index.html` (no icon library, no emoji, no raster UI icons).
+
+- **Style:** one outline family on a 24 × 24 grid — round caps/joins, large circles `r=9`, frames `rx≈3`, colour always via `currentColor`.
+- **Usage:** `<svg class="i i-md" aria-hidden="true"><use href="#i-calendar"/></svg>` in HTML, or `icon('calendar', 'md')` in `app.js` (`setIcon(svg, name)` swaps an existing icon).
+- **Sizes** (`styles.css` tokens): `xs` 14 px metadata · `sm` 16 px chips/inline · `md` 20 px buttons/rows (default) · `lg` 24 px tab bar/FAB · `xl` 32 px empty states. Stroke width is set per size so every icon renders at the same visual weight.
+- **Priorities:** Must do = `flag`, Should do = `circle-dot`, If I have time = `leaf` — always paired with the label, colour only reinforces.
+- **Icon buttons:** `.icon-btn` (+ `-subtle`, `-primary`, `-danger`, `-sm`, `-lg`). Visual size may be small; the hit area is always ≥ 44 × 44 px. Icon-only buttons must have an `aria-label`.
+- **Available symbols:** home, check-circle, calendar, calendar-check, calendar-days, calendar-forward, clock, bell, repeat, sun, moon, sticky-note, file-text, user, menu, plus, minus, x, check, ellipsis, pencil, trash, copy, archive, pin, pin-off, arrow-left/right, undo, rotate-ccw, search, filter, sort, mic, chevron-left/right/up/down, flag, circle-dot, leaf, flame, sparkles, circle, info, list-checks, chart, gauge, activity, database, upload, download, cloud, settings, smartphone.
+
+The home-screen icons (`icon-180/192/512.png`) use the same mark: a white disc with an indigo check on a full-bleed indigo field, kept inside the maskable safe zone.
+
 ## Project structure
 
 ```text
