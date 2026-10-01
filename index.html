@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+  <meta name="description" content="Checklist và ghi chú nhanh tối ưu cho sử dụng hằng ngày trên điện thoại." />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#F6F6F3" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#111113" media="(prefers-color-scheme: dark)" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Done Today" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Done Today</title>
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="i-today" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.3 2.6 2.6 5-5.4"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+      <symbol id="i-note" viewBox="0 0 24 24"><path d="M6.5 3.5h7.8l4.2 4.2v10.8a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M14 3.7V8h4.3M8.5 12.5h7M8.5 16h4.5"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.8 20c.9-3.6 3.7-5.6 7.2-5.6s6.3 2 7.2 5.6"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18" cy="12" r="1.3"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4.2 4.2 8.8-9.4"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 21V4.5M5.5 4.5h10.2l-1.9 4 1.9 4H5.5"/></symbol>
+      <symbol id="i-forward" viewBox="0 0 24 24"><path d="M4.5 12h14M13 6.5l5.5 5.5-5.5 5.5"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15M10 3.8h4M6.5 7l.8 11.3a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9L17.5 7M10 11v5.5M14 11v5.5"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/></symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M9.5 6.5h10M9.5 12h10M9.5 17.5h10"/><path d="m4 6.5 1.2 1.2L7 5.6M4 12l1.2 1.2L7 11.1"/><circle cx="5.3" cy="17.5" r=".9"/></symbol>
+      <symbol id="i-text" viewBox="0 0 24 24"><path d="M5 6.5h14M5 11h14M5 15.5h9"/></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4.5 19.5h4l10.3-10.3a2.1 2.1 0 0 0-3-3L5.5 16.5l-1 3Z"/><path d="m14.5 7.5 2.9 2.9"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.8v1.8M12 19.4v1.8M2.8 12h1.8M19.4 12h1.8M5.5 5.5l1.3 1.3M17.2 17.2l1.3 1.3M5.5 18.5l1.3-1.3M17.2 6.8l1.3-1.3"/></symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 7.5 4.5 12 9 16.5"/><path d="M4.5 12h10a5 5 0 0 1 0 10H12"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="app" id="app">
+    <div class="nav-compact" id="navCompact" aria-hidden="true">
+      <span class="nav-compact-title" id="navCompactTitle">Hôm nay</span>
+    </div>
+
+    <main class="screen" id="screen" tabindex="-1"></main>
+
+    <button class="fab" id="fab" type="button" aria-label="Thêm công việc">
+      <svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>
+    </button>
+
+    <nav class="tabbar" aria-label="Điều hướng chính">
+      <div class="tabbar-inner">
+        <button class="tab" type="button" data-tab="today">
+          <span class="tab-icon"><svg class="i" aria-hidden="true"><use href="#i-today"/></svg></span>
+          <span class="tab-label">Hôm nay</span>
+        </button>
+        <button class="tab" type="button" data-tab="calendar">
+          <span class="tab-icon"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+          <span class="tab-label">Lịch</span>
+        </button>
+        <button class="tab" type="button" data-tab="notes">
+          <span class="tab-icon"><svg class="i" aria-hidden="true"><use href="#i-note"/></svg></span>
+          <span class="tab-label">Ghi chú</span>
+        </button>
+        <button class="tab" type="button" data-tab="me">
+          <span class="tab-icon"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span>
+          <span class="tab-label">Tôi</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="sheet-backdrop" id="sheetBackdrop"></div>
+
+  <!-- Quick capture -->
+  <section class="sheet" id="quickSheet" role="dialog" aria-modal="true" aria-labelledby="quickHeading" tabindex="-1" inert>
+    <div class="sheet-handle" aria-hidden="true"><span></span></div>
+    <div class="sheet-header">
+      <h2 class="sr-only" id="quickHeading">Thêm nhanh</h2>
+      <div class="segmented" role="radiogroup" aria-label="Loại nội dung">
+        <button type="button" class="seg-btn" role="radio" aria-checked="true" data-capture-mode="task">Công việc</button>
+        <button type="button" class="seg-btn" role="radio" aria-checked="false" data-capture-mode="note">Ghi chú</button>
+      </div>
+      <button type="button" class="icon-btn" data-close-sheet aria-label="Đóng">
+        <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+
+    <div class="sheet-body">
+      <textarea id="quickInput" class="capture-input" rows="1" enterkeyhint="done" autocomplete="off" placeholder="Cần làm gì?" aria-label="Nội dung"></textarea>
+
+      <div class="parse-preview" id="parsePreview" hidden>
+        <span class="parse-preview-text" id="parsePreviewText"></span>
+        <button type="button" class="link-btn" id="parseDismiss">Bỏ qua</button>
+      </div>
+
+      <div class="task-options" id="taskOptions">
+        <div class="chip-row" role="group" aria-label="Tùy chọn công việc">
+          <button type="button" class="chip" id="dateChip" data-panel="date" aria-expanded="false" aria-controls="panelDate">
+            <svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg><span class="chip-label">Hôm nay</span>
+          </button>
+          <span class="chip chip-field" id="timeChip">
+            <svg class="i" aria-hidden="true"><use href="#i-clock"/></svg><span class="chip-label" id="timeChipLabel">Giờ</span>
+            <input type="time" id="quickTime" class="chip-native" aria-label="Chọn giờ" />
+            <button type="button" class="chip-clear" id="quickTimeClear" aria-label="Bỏ giờ" hidden>
+              <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+            </button>
+          </span>
+          <button type="button" class="chip" id="priorityChip" data-panel="priority" aria-expanded="false" aria-controls="panelPriority">
+            <span class="prio-dot" aria-hidden="true"></span><span class="chip-label">Nên làm</span>
+          </button>
+          <button type="button" class="chip" id="moreChip" data-panel="more" aria-expanded="false" aria-controls="panelMore">
+            <svg class="i" aria-hidden="true"><use href="#i-more"/></svg><span class="chip-label">Thêm</span>
+          </button>
+        </div>
+
+        <div class="option-panel" id="panelDate" data-panel-body="date" hidden>
+          <button type="button" class="option" data-date-preset="0">Hôm nay</button>
+          <button type="button" class="option" data-date-preset="1">Ngày mai</button>
+          <span class="option option-field">
+            <span id="quickDateLabel">Chọn ngày…</span>
+            <input type="date" id="quickDate" class="chip-native" aria-label="Chọn ngày" />
+          </span>
+        </div>
+
+        <div class="option-panel" id="panelPriority" data-panel-body="priority" role="radiogroup" aria-label="Mức ưu tiên" hidden>
+          <button type="button" class="option" role="radio" data-priority-option="must"><span class="prio-dot" data-p="must" aria-hidden="true"></span>Phải làm</button>
+          <button type="button" class="option" role="radio" data-priority-option="should"><span class="prio-dot" data-p="should" aria-hidden="true"></span>Nên làm</button>
+          <button type="button" class="option" role="radio" data-priority-option="later"><span class="prio-dot" data-p="later" aria-hidden="true"></span>Có thời gian</button>
+        </div>
+
+        <div class="option-panel option-panel-stack" id="panelMore" data-panel-body="more" hidden>
+          <textarea id="quickNote" class="soft-input" rows="2" placeholder="Ghi chú ngắn" aria-label="Ghi chú cho công việc"></textarea>
+          <div class="subtask-editor" id="quickSubtasks"></div>
+        </div>
+      </div>
+
+      <p class="capture-hint" id="captureHint">Gõ tự nhiên: “Mai 9h review PR”, “!gấp”, “3h chiều”.</p>
+    </div>
+
+    <div class="sheet-footer">
+      <button type="button" class="icon-btn icon-btn-lg" id="voiceBtn" aria-label="Nhập bằng giọng nói">
+        <svg class="i" aria-hidden="true"><use href="#i-mic"/></svg>
+      </button>
+      <button type="button" class="primary-btn" id="addQuickBtn" disabled>Thêm</button>
+    </div>
+  </section>
+
+  <!-- Task detail -->
+  <section class="sheet" id="detailSheet" role="dialog" aria-modal="true" aria-labelledby="detailHeading" tabindex="-1" inert>
+    <div class="sheet-handle" aria-hidden="true"><span></span></div>
+    <div class="sheet-header">
+      <h2 class="sheet-title" id="detailHeading">Chi tiết</h2>
+      <button type="button" class="icon-btn" data-close-sheet aria-label="Đóng và lưu">
+        <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+
+    <div class="sheet-body">
+      <div class="detail-title">
+        <button type="button" class="check" id="detailCheck" role="checkbox" aria-checked="false" aria-label="Hoàn thành">
+          <svg class="i" aria-hidden="true"><use href="#i-check"/></svg>
+        </button>
+        <textarea id="detailName" class="title-input" rows="1" aria-label="Tiêu đề công việc" enterkeyhint="done"></textarea>
+      </div>
+      <textarea id="detailNote" class="soft-input" rows="2" placeholder="Thêm ghi chú…" aria-label="Ghi chú"></textarea>
+
+      <div class="field-block">
+        <p class="field-caption" id="detailPriorityLabel">Ưu tiên</p>
+        <div class="segmented segmented-prio" id="detailPriority" role="radiogroup" aria-labelledby="detailPriorityLabel">
+          <button type="button" class="seg-btn" role="radio" data-value="must"><span class="prio-dot" data-p="must" aria-hidden="true"></span>Phải làm</button>
+          <button type="button" class="seg-btn" role="radio" data-value="should"><span class="prio-dot" data-p="should" aria-hidden="true"></span>Nên làm</button>
+          <button type="button" class="seg-btn" role="radio" data-value="later"><span class="prio-dot" data-p="later" aria-hidden="true"></span>Có thời gian</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <label class="group-row">
+          <span class="row-label"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg>Ngày</span>
+          <input type="date" id="detailDate" class="row-input" />
+        </label>
+        <div class="group-row">
+          <label class="row-label" for="detailTime"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg>Giờ</label>
+          <span class="row-end">
+            <input type="time" id="detailTime" class="row-input" />
+            <button type="button" class="icon-btn icon-btn-sm" id="detailTimeClear" aria-label="Bỏ giờ" hidden>
+              <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+            </button>
+          </span>
+        </div>
+      </div>
+
+      <div class="field-block">
+        <div class="field-head">
+          <p class="field-caption">Các bước</p>
+          <span class="field-count" id="detailSubCount"></span>
+        </div>
+        <div class="subtask-editor subtask-editor-card" id="detailSubtasks"></div>
+      </div>
+    </div>
+
+    <div class="sheet-footer">
+      <button type="button" class="secondary-btn danger-text" id="deleteTaskBtn">
+        <svg class="i" aria-hidden="true"><use href="#i-trash"/></svg>Xóa
+      </button>
+      <button type="button" class="primary-btn" id="saveTaskBtn">Xong</button>
+    </div>
+  </section>
+
+  <!-- Task actions (long press / more) -->
+  <section class="sheet action-sheet" id="actionSheet" role="dialog" aria-modal="true" aria-labelledby="actionHeading" tabindex="-1" inert>
+    <div class="sheet-handle" aria-hidden="true"><span></span></div>
+    <h2 class="action-heading" id="actionHeading"></h2>
+    <div class="action-list">
+      <button type="button" class="action-item" data-task-action="toggle">
+        <svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span id="actionToggleLabel">Đánh dấu hoàn thành</span>
+      </button>
+      <button type="button" class="action-item" data-task-action="edit">
+        <svg class="i" aria-hidden="true"><use href="#i-edit"/></svg><span>Chỉnh sửa chi tiết</span>
+      </button>
+      <button type="button" class="action-item" data-task-action="shift">
+        <svg class="i" aria-hidden="true"><use href="#i-forward"/></svg><span id="actionShiftLabel">Dời sang ngày mai</span>
+      </button>
+      <button type="button" class="action-item danger-text" data-task-action="delete">
+        <svg class="i" aria-hidden="true"><use href="#i-trash"/></svg><span>Xóa công việc</span>
+      </button>
+    </div>
+    <div class="sheet-footer">
+      <button type="button" class="secondary-btn wide" data-close-sheet>Hủy</button>
+    </div>
+  </section>
+
+  <!-- Note editor -->
+  <section class="sheet" id="noteSheet" role="dialog" aria-modal="true" aria-labelledby="noteHeading" tabindex="-1" inert>
+    <div class="sheet-handle" aria-hidden="true"><span></span></div>
+    <div class="sheet-header">
+      <div>
+        <h2 class="sheet-title" id="noteHeading">Ghi chú</h2>
+        <p class="sheet-subtitle" id="noteMeta"></p>
+      </div>
+      <button type="button" class="icon-btn" data-close-sheet aria-label="Đóng và lưu">
+        <svg class="i" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body">
+      <textarea id="noteText" class="note-input" rows="6" aria-label="Nội dung ghi chú"></textarea>
+    </div>
+    <div class="sheet-footer">
+      <button type="button" class="secondary-btn danger-text" id="deleteNoteBtn">
+        <svg class="i" aria-hidden="true"><use href="#i-trash"/></svg>Xóa
+      </button>
+      <button type="button" class="primary-btn" id="saveNoteBtn">Xong</button>
+    </div>
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-msg" id="toastMsg"></span>
+    <button type="button" class="toast-action" id="toastAction" hidden>
+      <svg class="i" aria-hidden="true"><use href="#i-undo"/></svg>Hoàn tác
+    </button>
+  </div>
+
+  <input class="focus-proxy" id="focusProxy" type="text" aria-hidden="true" tabindex="-1" autocomplete="off" />
+
+  <script src="app.js"></script>
+</body>
+</html>
